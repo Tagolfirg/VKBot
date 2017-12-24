@@ -82,18 +82,41 @@ class Listeners {
                             .send();
                     break;
                 }
-                case "тест": {
-//                    Main.sql.insert(message.authorId(), Integer.valueOf(message.getText().toLowerCase().split(" ")[1]), false);
-                    Main.sql.insert(message.authorId(), 201, true);
-//                    System.out.println("2");
-                    new Message()
-                            .from(user)
-                            .to(message.authorId())
-                            .text("Ваше имя: " + Student.getStudent(message.authorId()).getFirstName()
-                                    + "\nВаш статус: " + getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
-                            .send();
-//                    System.out.println("3");
-                    System.out.println(Main.sql.select(message.authorId()));
+
+
+
+                /*
+                * TODO:
+                * Доделать старосту:
+                * 1) Проверка есть ли этот пользователь в БД, если да, то:
+                *    - "Извините, но Вы уже подали заявку на пост старосты group-й группы" //Если allowed - false
+                *    - "Вы уже имеется статус старосты group-й группы :-)" //Если allowed - true и id_vk == message.authorId()
+                *    - "Староста group-й группы - [id123123|Станислав]" //Если allowed - true и id_vk != message.authorId()
+                * 2) Дописать хуйню по отказу (когда администрация отказала), например:
+                *    - "Извините, но нам кажется, что Вы не староста group-й группы 🤔"
+                */
+                
+                case "староста": {
+                    try{
+                        int num = Integer.parseInt(message.getText().split(" ")[1]);
+                        Main.sql.insert(message.authorId(), num, false);
+                        new Message()
+                                .from(user)
+                                .to(message.authorId())
+                                .text(Student.getStudent(message.authorId()).getFirstName()
+                                        + ", Ваша заявка на пост старосты принята!"
+                                        + "\nВас оповестят, когда вам выдадут статус старосты")
+                                .send();
+
+                    } catch (Exception e) {
+                        new Message()
+                                .from(user)
+                                .to(message.authorId())
+                                .text("Приведите сообщения к такому виду:\n"
+                                        + "/староста группа\n"
+                                        + "Например, /староста 202")
+                                .send();
+                    }
                     break;
 
                 }
