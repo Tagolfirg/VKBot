@@ -24,7 +24,7 @@ public class Main {
 //    public static Main instance;
     private static Configuration configuration;
     private static MySQL mysql;
-    private static SQLite sql;
+    public static SQLite sql;
     private static ConsoleReader consoleReader;
     private static Boolean enable = true;
 
@@ -89,7 +89,7 @@ public class Main {
     System.out.println(CC.WHITE + "[" + CC.CYAN + time() + CC.WHITE + "] [" + CC.GREEN + "Чат" + CC.WHITE + "] " + sender + "*" + CC.CYAN +id + CC.GREEN + " > " + CC.RESET + args);
     }
 
-    static String time(){
+    private static String time(){
         DateTimeFormatter ttf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return ttf.format(now);

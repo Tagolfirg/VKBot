@@ -82,6 +82,21 @@ class Listeners {
                             .send();
                     break;
                 }
+                case "тест": {
+                    System.out.println("1");
+                    Main.sql.insert(message.authorId(), Integer.valueOf(message.getText().toLowerCase().split("")[1]), false);
+                    System.out.println("2");
+                    new Message()
+                            .from(user)
+                            .to(message.authorId())
+                            .text("Ваше имя: " + Student.getStudent(message.authorId()).getFirstName()
+                                    + "\nВаш статус: " + getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
+                            .send();
+                    System.out.println("3");
+                    System.out.println(Main.sql.select(message.authorId()));
+                    break;
+
+                }
 //                case "голос": {
 //                    new Message()
 //                            .from(user)
