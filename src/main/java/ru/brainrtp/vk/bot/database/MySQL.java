@@ -73,21 +73,22 @@ public class MySQL {
     }
 
     private void createDataBase() throws SQLException {
-        String sql = "CREATE TABLE IF NOT EXISTS `users` (" +
+        String sql = "CREATE TABLE IF NOT EXISTS `captain` (" +
                         "`id` INTEGER AUTO_INCREMENT PRIMARY KEY, " +
-                        "`username` VARCHAR(50) NOT NULL UNIQUE, " +
-                        "`eastereggs` VARCHAR(255)" +
+                        "`vk_id` INTEGER NOT NULL UNIQUE, " +
+                        "`party` INTEGER NOT NULL" +
+                        "`allowed` BOOLEAN DEFAULT 0" +
                         ");";
 //        String sql = "CREATE TABLE IF NOT EXISTS myTable(Something varchar(64));";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.executeUpdate();
     }
 
-    public void insert(String user, String ee){
+    public void insert(int id, int group, boolean allowed) {
 
-        if (hasUser(user)){
+        if (hasUser(id)){
             try {
-                PreparedStatement stmt = connection.prepareStatement("UPDATE `users` SET `eastereggs`='"+ ee +"' WHERE `username`='" + user.toLowerCase() + "' ");
+                PreparedStatement stmt = connection.prepareStatement("UPDATE `captain` SET `allowed`='"+ allowed +"' WHERE `vk_id`='" + id + "' ");
                 stmt.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,10 +96,11 @@ public class MySQL {
 
         } else {
             try {
-                PreparedStatement stmt = connection.prepareStatement("INSERT INTO users (username,eastereggs) VALUES (?,?);");
+                PreparedStatement stmt = connection.prepareStatement("INSERT INTO captain (vk_id,party,allowed) VALUES (?,?,?);");
 //            PreparedStatement stmt = connection.prepareStatement("INSERT INTO `users`(`username`, `eastereggs`) VALUES('?', '?') ON DUPLICATE KEY UPDATE `e`=`Huynya`+'1';");
-                stmt.setString(1, user.toLowerCase());
-                stmt.setString(2, ee);
+                stmt.setInt(1, id);
+                stmt.setInt(2, group);
+                stmt.setBoolean(3, allowed);
                 stmt.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,15 +110,16 @@ public class MySQL {
 
     }
 
-    public ArrayList<String> select(String user) {
+    public ArrayList<String> select(int vk_id) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?;");
-            stmt.setString(1, user);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM captain WHERE vk_id = ?;");
+            stmt.setInt(1, vk_id);
             ResultSet e = stmt.executeQuery();
             ArrayList<String> item = new ArrayList<String>();
             if (e.next()) {
-                item.add(e.getString("username"));
-                item.add(e.getString("eastereggs"));
+                item.add(e.getString("vk_id"));
+                item.add(e.getString("party"));
+                item.add(e.getString("allowed"));
                 return item;
             }
         } catch (Exception e) {
@@ -125,10 +128,10 @@ public class MySQL {
         return null;
     }
 
-    public boolean hasUser(String user) {
+    public boolean hasUser(int vk_id) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE username = ?;");
-            stmt.setString(1, user);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM captain WHERE vk_id = ?;");
+            stmt.setInt(1, vk_id);
             ResultSet e = stmt.executeQuery();
             if (e.next()) {
                 return true;
