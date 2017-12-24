@@ -10,15 +10,14 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class SQLite {
-    static Connection conn;
-    static Statement statmt;
-    static PreparedStatement preparedStatement = null;
+    private static Connection conn;
+    private static Statement statmt;
+    private static PreparedStatement preparedStatement = null;
 
     private static String getJarPath() throws IOException, URISyntaxException {
         File f = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        String jarPath = f.getCanonicalPath().toString();
-        String jarDir = jarPath.substring( 0, jarPath.lastIndexOf( File.separator ));
-        return jarDir;
+        String jarPath = f.getCanonicalPath();
+        return jarPath.substring( 0, jarPath.lastIndexOf( File.separator ));
     }
 
     public SQLite() {
@@ -28,20 +27,24 @@ public class SQLite {
             conn = DriverManager.getConnection("jdbc:sqlite://" + getJarPath() + "/users.db");
             statmt = conn.createStatement();
             statmt.execute(
-                    "CREATE TABLE IF NOT EXISTS `captain` (`vk_id` varchar(50) PRIMARY KEY,`party` int NOT NULL, `allowed` BOOL)");
+                    "CREATE TABLE IF NOT EXISTS [captain]( \n" +
+                            " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
+                            " [party] INTEGER NOT NULL, \n" +
+                            " [allowed] BOOL DEFAULT 0);");
+//                    "CREATE TABLE IF NOT EXISTS `captain` (`vk_id` varchar(50) PRIMARY KEY,`party` INTEGER, `allowed` BOOL)");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void insert(String id, int group, int allowed) {
+    public void insert(int id, int group, boolean allowed) {
         try {
-            PreparedStatement e = conn.prepareStatement("INSERT OR REPLACE INTO captain (vk_id,party,allowed) VALUES (?,?,?);");
-            e.setString(1, id);
+            PreparedStatement e = conn.prepareStatement(
+                    "INSERT OR REPLACE INTO captain (vk_id,party,allowed) VALUES (?,?,?);");
+            e.setInt(1, id);
             e.setInt(2, group);
-            e.setInt(2, allowed);
-//            e.setString(2, allowed);
+            e.setBoolean(3, allowed);
             e.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,6 +61,7 @@ public class SQLite {
                 item.add(e.getString("vk_id"));
                 item.add(e.getString("party"));
                 item.add(e.getString("allowed"));
+                e.close();
                 return item;
             }
         } catch (Exception e) {

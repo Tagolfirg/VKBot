@@ -84,7 +84,7 @@ class Listeners {
                 }
                 case "тест": {
 //                    Main.sql.insert(message.authorId(), Integer.valueOf(message.getText().toLowerCase().split(" ")[1]), false);
-                    Main.sql.insert(String.valueOf(message.authorId()), 201, 0);
+                    Main.sql.insert(message.authorId(), 201, true);
 //                    System.out.println("2");
                     new Message()
                             .from(user)
