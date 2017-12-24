@@ -25,7 +25,7 @@ public class SQLite {
             conn = DriverManager.getConnection("jdbc:sqlite://" + getJarPath() + "/users.db");
             Statement statmt = conn.createStatement();
             statmt.execute(
-                    "CREATE TABLE IF NOT EXISTS [captain]( \n" +
+                    "CREATE TABL    E IF NOT EXISTS [captain]( \n" +
                             " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
                             " [party] INTEGER NOT NULL, \n" +
                             " [allowed] BOOL DEFAULT 0);");

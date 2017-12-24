@@ -12,7 +12,7 @@ import com.petersamokhin.bots.sdk.clients.User;
 class Utils {
     private static String first_name = "";
     private static String last_name = "";
-
+    //Стас сосет хуй
     static String getFirstName(User user, Integer id) {
         user.api().call("users.get", "{user_ids:"+id+"}", response -> {
             String jsonString = response.toString();
