@@ -1,7 +1,7 @@
 # ulimit -c unlimited
 prefix: "хуй"
 MySQL:
-  Enable: true
+  Enable: false
   Username: "test"
   Password: "test123"
   Host: "no host"
