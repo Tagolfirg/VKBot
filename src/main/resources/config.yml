@@ -1,0 +1,9 @@
+# ulimit -c unlimited
+prefix: "хуй"
+MySQL:
+  Enable: true
+  Username: "test"
+  Password: "test123"
+  Host: "no host"
+  Port: "3306"
+  Database: "test"
