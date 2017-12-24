@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class SQLite {
     private static Connection conn;
-    private static Statement statmt;
-    private static PreparedStatement preparedStatement = null;
 
     private static String getJarPath() throws IOException, URISyntaxException {
         File f = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -25,13 +23,12 @@ public class SQLite {
             Class.forName("org.sqlite.JDBC");
 
             conn = DriverManager.getConnection("jdbc:sqlite://" + getJarPath() + "/users.db");
-            statmt = conn.createStatement();
+            Statement statmt = conn.createStatement();
             statmt.execute(
                     "CREATE TABLE IF NOT EXISTS [captain]( \n" +
                             " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
                             " [party] INTEGER NOT NULL, \n" +
                             " [allowed] BOOL DEFAULT 0);");
-//                    "CREATE TABLE IF NOT EXISTS `captain` (`vk_id` varchar(50) PRIMARY KEY,`party` INTEGER, `allowed` BOOL)");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +50,7 @@ public class SQLite {
 
     public ArrayList<String> select(int vk_id) {
         try {
-            preparedStatement = conn.prepareStatement("SELECT * FROM captain WHERE vk_id = ?;");
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM captain WHERE vk_id = ?;");
             preparedStatement.setInt(1, vk_id);
             ResultSet e = preparedStatement.executeQuery();
             ArrayList<String> item = new ArrayList<String>();
