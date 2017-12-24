@@ -71,8 +71,8 @@ class Listeners {
             }
             cooldowns.put(senderId, System.currentTimeMillis());
             latestChat = message.authorId();
-//            String first = message.getText().toLowerCase().split(" ")[0];
-            switch (message.getText().toLowerCase()){
+            String first = message.getText().toLowerCase().split(" ")[0];
+            switch (first){
                 case "инфо": {
                     new Message()
                             .from(user)
@@ -83,16 +83,16 @@ class Listeners {
                     break;
                 }
                 case "тест": {
-                    System.out.println("1");
-                    Main.sql.insert(message.authorId(), Integer.valueOf(message.getText().toLowerCase().split("")[1]), false);
-                    System.out.println("2");
+//                    Main.sql.insert(message.authorId(), Integer.valueOf(message.getText().toLowerCase().split(" ")[1]), false);
+                    Main.sql.insert(String.valueOf(message.authorId()), 201, 0);
+//                    System.out.println("2");
                     new Message()
                             .from(user)
                             .to(message.authorId())
                             .text("Ваше имя: " + Student.getStudent(message.authorId()).getFirstName()
                                     + "\nВаш статус: " + getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
                             .send();
-                    System.out.println("3");
+//                    System.out.println("3");
                     System.out.println(Main.sql.select(message.authorId()));
                     break;
 

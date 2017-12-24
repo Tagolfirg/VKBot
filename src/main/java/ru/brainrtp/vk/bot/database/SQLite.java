@@ -28,19 +28,20 @@ public class SQLite {
             conn = DriverManager.getConnection("jdbc:sqlite://" + getJarPath() + "/users.db");
             statmt = conn.createStatement();
             statmt.execute(
-                        "CREATE TABLE IF NOT EXISTS `vk_wait` (`vk_id` INT NOT NULL,`group` INT NOT NULL, `allowed` BOOLEAN NOT NULL)");
+                    "CREATE TABLE IF NOT EXISTS `captain` (`vk_id` varchar(50) PRIMARY KEY,`party` int NOT NULL, `allowed` BOOL)");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void insert(int id, int group, boolean allowed) {
+    public void insert(String id, int group, int allowed) {
         try {
-            PreparedStatement e = conn.prepareStatement("INSERT OR REPLACE INTO vk_wait (vk_id,group,allowed) VALUES (?,?,?);");
-            e.setInt(1, id);
+            PreparedStatement e = conn.prepareStatement("INSERT OR REPLACE INTO captain (vk_id,party,allowed) VALUES (?,?,?);");
+            e.setString(1, id);
             e.setInt(2, group);
-            e.setBoolean(2, allowed);
+            e.setInt(2, allowed);
+//            e.setString(2, allowed);
             e.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,12 +50,13 @@ public class SQLite {
 
     public ArrayList<String> select(int vk_id) {
         try {
-            preparedStatement = conn.prepareStatement("SELECT * FROM vk_wait WHERE vk_id = ?;");
+            preparedStatement = conn.prepareStatement("SELECT * FROM captain WHERE vk_id = ?;");
             preparedStatement.setInt(1, vk_id);
             ResultSet e = preparedStatement.executeQuery();
             ArrayList<String> item = new ArrayList<String>();
             if (e.next()) {
-                item.add(e.getString("group"));
+                item.add(e.getString("vk_id"));
+                item.add(e.getString("party"));
                 item.add(e.getString("allowed"));
                 return item;
             }
