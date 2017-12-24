@@ -113,7 +113,7 @@ public class Main {
                                 break;
                             }
                             case "stop": {
-                                log(CC.RED + "Выключение...");
+                                log(CC.RED + "Выключение..." + CC.RESET);
                                 Runtime.getRuntime().exit(0);
                             }
                             case "gc": {

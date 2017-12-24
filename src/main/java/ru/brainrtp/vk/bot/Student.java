@@ -21,7 +21,6 @@ public class Student {
 
 
     Student(int id) {
-//        System.out.println("Сасать хуй");
         this.id_student = id;
         Main.user.api().call("users.get", "{user_ids:"+id+"}", response -> {
             String jsonString = response.toString();
@@ -36,9 +35,7 @@ public class Student {
             } else {
                 permission.add("student");
             }
-//            System.out.println("Пососал хуй и заебись");
         });
-//        System.out.println("Закончили в студенте все делать");
     }
 
     public String getFirstName() {
