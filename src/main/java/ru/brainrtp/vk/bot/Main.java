@@ -142,8 +142,7 @@ public class Main {
                                 break;
                             }
                         }
-                    }
-                    catch (Exception ex) {}
+                    } catch (Exception ignored) {}
                 } while (enable);
             }
         }, "ConsoleThread").start();
