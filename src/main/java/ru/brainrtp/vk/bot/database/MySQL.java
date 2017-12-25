@@ -40,7 +40,7 @@ public class MySQL {
             Class.forName("com.mysql.jdbc.Driver");
 
             connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database +
-                    "?allowMultiQueries=true&useUnicode=true&" + "characterEncoding=UTF-8&",
+                            "?allowMultiQueries=true&useUnicode=true&" + "characterEncoding=UTF-8&",
                     this.username, this.password);
         }
     }
@@ -74,15 +74,17 @@ public class MySQL {
 
     private void createDataBase() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS `captain` (" +
-                        "`id` INTEGER AUTO_INCREMENT PRIMARY KEY, " +
-                        "`vk_id` INTEGER NOT NULL UNIQUE, " +
-                        "`party` INTEGER NOT NULL" +
-                        "`allowed` BOOLEAN DEFAULT 0" +
-                        ");";
+                "`id` INTEGER AUTO_INCREMENT PRIMARY KEY, " +
+                "`vk_id` INTEGER NOT NULL UNIQUE, " +
+                "`party` INTEGER NOT NULL" +
+                "`allowed` BOOLEAN DEFAULT 0" +
+                ");";
 //        String sql = "CREATE TABLE IF NOT EXISTS myTable(Something varchar(64));";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.executeUpdate();
     }
+
+    ///
 
     public void insert(int id, int group, boolean allowed) {
 

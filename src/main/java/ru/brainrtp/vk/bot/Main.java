@@ -137,6 +137,49 @@ public class Main {
                                 }
                                 break;
                             }
+                            case "captain":
+                                if (command.length == 1) {
+                                    System.out.println(CC.RED + "Недостаточно аргументов. Используй: 'captain <accept/deny> <idVk>'" + CC.RESET);
+                                    break;
+                                }
+                                if (command[1].equalsIgnoreCase("deny")) {
+                                    try {
+                                        int idVk = Integer.parseInt(command[2]);
+                                        if (sql.select(idVk).get(0) != null) {
+                                            sql.delete(idVk);
+                                            System.out.println(CC.RED + "Пользователь не подтвержден!" + CC.RESET);
+                                            new Message().from(user).to(idVk).text("Увы, но Вы не являетесь старостой этой группы.\nЕсли это ошибка, напишите администратору.").send();
+                                        }
+                                    } catch (Exception ex) {
+                                        System.out.println(CC.RED + "Неправльно указан idVk!" + CC.RESET);
+                                    }
+                                }
+                                if (command[1].equalsIgnoreCase("accept")) {
+                                    try {
+                                        int idVk = Integer.parseInt(command[2]);
+                                        if (sql.select(idVk).get(0) != null) {
+                                            sql.update(idVk, true);
+                                            Student.getStudent(idVk).setPermission("captain");
+                                            System.out.println(CC.GREEN + "Пользователь подтвержден!" + CC.RESET);
+                                            new Message().from(user).to(idVk).text("Поздравляем Вы теперь староста группы " + sql.select(idVk).get(1) + ".\nТеперь вам доступны команды:\nсозыв - созвать всех одногруппников\nновость - отправить всем новость.").send();
+                                        }
+                                    } catch (Exception ex) {
+                                        System.out.println(CC.RED + "Неправльно указан idVk!" + CC.RESET);
+                                    }
+                                }
+                                if (command[1].equalsIgnoreCase("delete")) {
+                                    try {
+                                        int idVk = Integer.parseInt(command[2]);
+                                        if (sql.select(idVk).get(0) != null) {
+                                            sql.delete(idVk);
+                                            System.out.println(CC.RED + "Пользователь изгнан!" + CC.RESET);
+                                            new Message().from(user).to(idVk).text("Увы, но администратор Вас узгнал из старосты.\nЕсли это ошибка, напишите администратору.").send();
+                                        }
+                                    } catch (Exception ex) {
+                                        System.out.println(CC.RED + "Неправльно указан idVk!" + CC.RESET);
+                                    }
+                                }
+                                break;
                             default: {
                                 System.out.println(CC.RED + "Неизвестная команда. Напишите '" + CC.RESET + "help" + CC.RED + "'" + CC.RESET);
                                 break;

@@ -46,6 +46,8 @@ public class Student {
         return this.permission;
     }
 
+    public void setPermission(String permission) { List<String> perm = new ArrayList<String>(); perm.add(permission); this.permission = perm; }
+
     public String getLastName() {
         return this.lastName;
     }

@@ -97,7 +97,15 @@ class Listeners {
                 */
                 
                 case "староста": {
-                    try{
+                    if (Main.sql.select(senderId) != null && Main.sql.select(senderId).get(2).equalsIgnoreCase("1")){
+                        new Message().from(user).to(senderId).text("Вы уже староста группы " + Main.sql.select(senderId).get(1) + ".").send();
+                        break;
+                    }
+                    if (Main.sql.select(senderId) != null) {
+                        new Message().from(user).to(senderId).text("Вы уже подали заявку на старосту группы " + Main.sql.select(senderId).get(1) + "!\nВаша заявка будет рассматриваться в течении суток.").send();
+                        break;
+                    }
+                    try {
                         int num = Integer.parseInt(message.getText().split(" ")[1]);
                         Main.sql.insert(message.authorId(), num, false);
                         new Message()
@@ -118,7 +126,6 @@ class Listeners {
                                 .send();
                     }
                     break;
-
                 }
 //                case "голос": {
 //                    new Message()
@@ -144,6 +151,8 @@ class Listeners {
     private static String getGroup(String permission){
         if (permission.equals("admin")){
             return "Администратор";
+        } else if (permission.equalsIgnoreCase("captain")) {
+            return "Староста";
         } else {
             return "Студент";
         }

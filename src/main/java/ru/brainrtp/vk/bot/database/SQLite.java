@@ -25,7 +25,7 @@ public class SQLite {
             conn = DriverManager.getConnection("jdbc:sqlite://" + getJarPath() + "/users.db");
             Statement statmt = conn.createStatement();
             statmt.execute(
-                    "CREATE TABL    E IF NOT EXISTS [captain]( \n" +
+                    "CREATE TABLE IF NOT EXISTS [captain]( \n" +
                             " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
                             " [party] INTEGER NOT NULL, \n" +
                             " [allowed] BOOL DEFAULT 0);");
@@ -42,6 +42,16 @@ public class SQLite {
             e.setInt(1, id);
             e.setInt(2, group);
             e.setBoolean(3, allowed);
+            e.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(int id, boolean allowed) {
+        try {
+            PreparedStatement e = conn.prepareStatement(
+                    "UPDATE [captain] SET [allowed]=" + (allowed ? 1 : 0) +" WHERE [vk_id]=" + id);
             e.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,5 +75,14 @@ public class SQLite {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void delete(int vk_id) {
+        try {
+            PreparedStatement e = conn.prepareStatement("DELETE FROM [captain] WHERE [vk_id] = " + vk_id);
+            e.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
