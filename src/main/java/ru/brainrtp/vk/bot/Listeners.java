@@ -127,15 +127,6 @@ class Listeners {
                     }
                     break;
                 }
-//                case "голос": {
-//                    new Message()
-//                            .from(user)
-//                            .to(message.authorId())
-//                            .text("Ваше имя: " + Student.getStudent(message.authorId()).getFirstName()
-//                                    + "\nВаш статус: " + getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
-//                            .send();
-//                    break;
-//                }
                 default: {
                     new Message()
                             .from(user)

@@ -27,7 +27,6 @@ public class Student {
             JsonArray jsonArray = new JsonParser().parse(jsonString).getAsJsonArray();
             JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
             this.lastName = jsonObject.get("last_name").getAsString();
-//            id_student = jsonObject.get("id").getAsInt();
             this.firstName = jsonObject.get("first_name").getAsString();
             students.put(this.id_student, this);
             if (id == 147906281){
@@ -38,15 +37,19 @@ public class Student {
         });
     }
 
-    public String getFirstName() {
+    String getFirstName() {
         return this.firstName;
     }
 
-    public List<String> getPermission() {
+    List<String> getPermission() {
         return this.permission;
     }
 
-    public void setPermission(String permission) { List<String> perm = new ArrayList<String>(); perm.add(permission); this.permission = perm; }
+    void setPermission(String permission) {
+        List<String> perm = new ArrayList<String>();
+        perm.add(permission);
+        this.permission = perm;
+    }
 
     public String getLastName() {
         return this.lastName;
@@ -55,6 +58,6 @@ public class Student {
     public int getIdStudent() {
         return this.id_student;
     }
-    public static Student getStudent(int id) {return students.get(id);}
+    static Student getStudent(int id) {return students.get(id);}
 
 }

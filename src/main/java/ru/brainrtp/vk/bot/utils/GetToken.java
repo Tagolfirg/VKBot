@@ -1,4 +1,4 @@
-package ru.brainrtp.vk.bot;
+package ru.brainrtp.vk.bot.utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;

@@ -1,8 +1,4 @@
-package ru.brainrtp.vk.bot;
-
-import ru.brainrtp.vk.bot.config.Configuration;
-import ru.brainrtp.vk.bot.config.ConfigurationProvider;
-import ru.brainrtp.vk.bot.config.YamlConfiguration;
+package ru.brainrtp.vk.bot.config;
 
 import java.io.File;
 import java.io.IOException;
