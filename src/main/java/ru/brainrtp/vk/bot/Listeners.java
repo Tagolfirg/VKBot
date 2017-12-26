@@ -2,6 +2,7 @@ package ru.brainrtp.vk.bot;
 
 import com.petersamokhin.bots.sdk.clients.User;
 import com.petersamokhin.bots.sdk.objects.Message;
+import ru.brainrtp.vk.bot.utils.Utils;
 
 import java.util.HashMap;
 
@@ -55,6 +56,20 @@ class Listeners {
         user.onMessage(message -> {
             if (!Student.students.containsKey(message.authorId())){
                 new Student(message.authorId());
+
+                /*
+                * TODO:
+                * 1) Сделать нормальную таблицу (потом обсудим)
+                * 2) Сделать запись в БД [students] только в том случае, если сатроста подтвердил пользователя
+                * 3) Возможно ли избавиться от [captain] или оставить как временное хранилище т.к у нас есть
+                *    в [students] колонка 'permission' и 'party' по которым мы можем вывести:
+                *    'permission' - captain, 'party' - 202, что будет означать - Староста 202-й группы.
+                */
+
+                // Сделал для тестов БД....
+                if (Main.sql.select(message.authorId()).get(0) != null) {
+                    Main.sql.insert(message.authorId(), 202, "student");
+                }
             }
             try {
                 Thread.sleep(500);
@@ -78,7 +93,7 @@ class Listeners {
                             .from(user)
                             .to(message.authorId())
                             .text("Ваше имя: " + Student.getStudent(message.authorId()).getFirstName()
-                                    + "\nВаш статус: " + getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
+                                    + "\nВаш статус: " + Utils.getGroup(Student.getStudent(message.authorId()).getPermission().get(0)))
                             .send();
                     break;
                 }
@@ -139,13 +154,4 @@ class Listeners {
 
     }
 
-    private static String getGroup(String permission){
-        if (permission.equals("admin")){
-            return "Администратор";
-        } else if (permission.equalsIgnoreCase("captain")) {
-            return "Староста";
-        } else {
-            return "Студент";
-        }
-    }
 }

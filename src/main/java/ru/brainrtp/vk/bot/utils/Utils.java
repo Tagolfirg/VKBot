@@ -70,4 +70,23 @@ public class Utils {
                 + (hour != 0 ? hour + " часов" : "")
                 + (minutes !=0 ? minutes + " минут": time + " секнуд");
     }
+
+    public static String getGroup(String permission){
+        if (permission.equals("admin")){
+            return "Администратор";
+        } else if (permission.equalsIgnoreCase("captain")) {
+            return "Староста";
+        } else {
+            return "Студент";
+        }
+    }
+    public static String getGroupColor(String permission){
+        if (permission.equalsIgnoreCase("admin")){
+            return CC.RED + "Администратор";
+        } else if (permission.equalsIgnoreCase("captain")) {
+            return CC.GREEN + "Староста";
+        } else {
+            return CC.CYAN + "Студент";
+        }
+    }
 }

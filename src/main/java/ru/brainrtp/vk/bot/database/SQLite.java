@@ -29,6 +29,11 @@ public class SQLite {
                             " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
                             " [party] INTEGER NOT NULL, \n" +
                             " [allowed] BOOL DEFAULT 0);");
+            statmt.execute(
+                    "CREATE TABLE IF NOT EXISTS [students]( \n" +
+                            " [vk_id] INTEGER NOT NULL UNIQUE, \n" +
+                            " [party] INTEGER NOT NULL, \n" +
+                            " [permission] VARCHAR(50) DEFAULT 'student');");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,11 +53,54 @@ public class SQLite {
         }
     }
 
+    public void insert(int id, int group, String permission) {
+        try {
+            PreparedStatement e = conn.prepareStatement(
+                    "INSERT OR REPLACE INTO students (vk_id,party,permission) VALUES (?,?,?);");
+            e.setInt(1, id);
+            e.setInt(2, group);
+            e.setString(3, permission);
+            e.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update(int id, boolean allowed) {
         try {
             PreparedStatement e = conn.prepareStatement(
                     "UPDATE [captain] SET [allowed]=" + (allowed ? 1 : 0) +" WHERE [vk_id]=" + id);
             e.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(int id, String permission) {
+        try {
+            PreparedStatement e = conn.prepareStatement(
+                    "UPDATE [students] SET [permission]='" + permission +"' WHERE [vk_id]=" + id);
+            e.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void get(String table) {
+        try {
+            PreparedStatement e = conn.prepareStatement("SELECT * FROM [" + table + "]");
+            ResultSet resultSet = e.executeQuery();
+            ArrayList<String> item = new ArrayList<String>();
+            System.out.println("vk_id  | party | permisson");
+            while(resultSet.next())
+            {
+                int id = resultSet.getInt("vk_id");
+                String party = resultSet.getString("party");
+                String permission = resultSet.getString("permission");
+                System.out.println(id + " " + party + " " + permission);
+            }
+
+            System.out.println("Таблица выведена");
         } catch (Exception e) {
             e.printStackTrace();
         }

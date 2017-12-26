@@ -95,14 +95,16 @@ public class Main {
                                 System.out.println(CC.RED + "replay " + CC.RESET + "- Ответить на последнее сообщение");
                                 System.out.println(CC.RED + "captain " + CC.RESET + "- Действия со старостами");
                                 System.out.println(CC.BLACK_BOLD_BRIGHT + "debug " + CC.RESET + "- включить/выключить debug");
-                                System.out.println(CC.BLACK_BOLD_BRIGHT + "permission [user] [permission] " + CC.RESET + "- Установить ползователю [user] права [permisson]");
+                                System.out.println(CC.BLACK_BOLD_BRIGHT + "permission [idVK] [permission] " + CC.RESET + "- Установить ползователю [user] права [permisson]");
                                 break;
                             }
+
                             case "stop": {
                                 log(CC.RED + "Бот проработал " + CC.RESET + Utils.convert((int) ((System.currentTimeMillis() - start)) / 1000));
                                 log(CC.RED + "Выключение..." + CC.RESET);
                                 Runtime.getRuntime().exit(0);
                             }
+
                             case "gc": {
                                 System.out.println(CC.RED + "Время работы: " + CC.RESET + Utils.convert((int) ((System.currentTimeMillis() - start)) / 1000));
                                 System.out.println(CC.RED + "Максимум памяти: " + CC.GREEN + Runtime.getRuntime().maxMemory() / 1024L / 1024L + " MB" + CC.RESET);
@@ -111,6 +113,7 @@ public class Main {
                                 System.out.println(CC.RED + "Использовано памяти: " + CC.GREEN + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L / 1024L + " MB" + CC.RESET);
                                 break;
                             }
+
                             case "replay": {
                                 if (Listeners.latestChat != 0) {
                                     new Message()
@@ -124,11 +127,58 @@ public class Main {
                                 }
                                 break;
                             }
-                            case "captain":
+
+                            case "permission": {
+                                sql.get("students");
+                                try {
+                                    if (command.length == 3){
+                                        int idVk = Integer.parseInt(command[1]);
+                                        if (sql.select(idVk).get(0) != null){
+
+                                            // TODO: Сделать проверку на "Имеется ли это права в списке доступных прав (нужен для getGroup и чтобы ошибку не допускать)"
+
+                                            // TODO: Если не написать боту и попытаться выдать права - catch (NPE) {...} 🤔 Исправить...
+
+                                            /*
+                                             Ловлю такую ошибку:
+
+                                             permission 147906281 admin #Команда
+                                             vk_id  | party | permisson #Вывод колонок
+                                             147906281 202 student #Вывод данных из SQLite
+                                             Таблица выведена #Окончание вывода
+                                             Пользователь не найден! #ОШИБКА!!
+
+                                             P.s как можешь заметить - пользователь есть, но и ошибка тоже!!
+                                            */
+
+                                            sql.update(idVk, command[2]);
+                                            log("Пользователю " + Student.getStudent(idVk).getFirstName() + " " + Student.getStudent(idVk).getLastName() + "*" + CC.CYAN + idVk + CC.RESET
+                                                    + " выдана группа " + Utils.getGroupColor(command[2]) + CC.RESET);
+                                        } else {
+                                            System.out.println(CC.RED + "Пользователь не найден!" + CC.RESET);
+                                        }
+                                    }
+                                    else if (command.length < 3){
+                                        System.out.println(CC.RED + "Недостаточно аргументов. Используйте: '" + CC.RESET + "permission [user] [permission]" + CC.RED + "'" + CC.RESET);
+                                    }
+                                    else {
+                                        System.out.println(CC.RED + "Слишком много аргументов. Используйте: '" + CC.RESET + "permission [user] [permission]" + CC.RED + "'" + CC.RESET);
+                                    }
+                                    break;
+//                                } catch (Exception ex){
+//                                    System.out.println(CC.RED + "Произошла ошибка" + CC.RESET);
+//                                    ex.printStackTrace();
+                                } catch (NullPointerException ex) {
+                                    System.out.println(CC.RED + "Пользователь не найден!" + CC.RESET);
+                                }
+                            }
+
+                            case "captain": {
                                 if (command.length == 1) {
-                                    System.out.println(CC.RED + "Недостаточно аргументов. Используйте: '" + CC.RESET + "captain <accept/deny> <idVk>" + CC.RED + "'" + CC.RESET);
+                                    System.out.println(CC.RED + "Недостаточно аргументов. Используйте: '" + CC.RESET + "captain [accept/deny] [idVk]" + CC.RED + "'" + CC.RESET);
                                     break;
                                 }
+
                                 if (command[1].equalsIgnoreCase("deny")) {
                                     try {
                                         int idVk = Integer.parseInt(command[2]);
@@ -146,7 +196,8 @@ public class Main {
                                         System.out.println(CC.RED + "Неправльно указан id VK!" + CC.RESET);
                                     }
                                 }
-                                if (command[1].equalsIgnoreCase("accept")) {
+
+                                else if (command[1].equalsIgnoreCase("accept")) {
                                     try {
                                         int idVk = Integer.parseInt(command[2]);
                                         if (sql.select(idVk).get(0) != null) {
@@ -156,7 +207,7 @@ public class Main {
                                             new Message()
                                                     .from(user)
                                                     .to(idVk)
-                                                    .text("Поздравляем теперь Вы староста " + sql.select(idVk).get(1) + "-й группы!"+
+                                                    .text("Поздравляем теперь Вы староста " + sql.select(idVk).get(1) + "-й группы!" +
                                                             ".\nТеперь вам доступны команды:" +
                                                             "\nсозыв - созвать всех одногруппников" +
                                                             "\nновость - отправить всем новость.")
@@ -166,7 +217,8 @@ public class Main {
                                         System.out.println(CC.RED + "Неправльно указан id VK!" + CC.RESET);
                                     }
                                 }
-                                if (command[1].equalsIgnoreCase("delete")) {
+
+                                else if (command[1].equalsIgnoreCase("delete")) {
                                     try {
                                         int idVk = Integer.parseInt(command[2]);
                                         if (sql.select(idVk).get(0) != null) {
@@ -184,6 +236,8 @@ public class Main {
                                     }
                                 }
                                 break;
+                            }
+
                             default: {
                                 System.out.println(CC.RED + "Неизвестная команда. Напишите '" + CC.RESET + "help" + CC.RED + "'" + CC.RESET);
                                 break;
