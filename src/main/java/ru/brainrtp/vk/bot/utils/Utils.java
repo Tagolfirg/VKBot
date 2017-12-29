@@ -43,7 +43,7 @@ public class Utils {
         }
         return last_name;
     }
-    
+
     public static String convert(int time){
 
         long seconds = (time / 1000) % 60;
@@ -51,23 +51,29 @@ public class Utils {
         long hours = (time / (1000 * 60 * 60)) % 24;
         long days = (time / (1000 * 60 * 60 * 24));
 
+        /*
+          * nom — Nominativ, именительный падеж;
+          * gen — Genetiv, родительный падеж;
+          * plu — Plural, множественное число.
+         */
+        
         return (days != 0 ? days + " " +formatTime((int) days, "день", "дня", "дней") : "")
                 + (hours != 0 ? hours + " " + formatTime((int) hours, "час", "часа", "часов") : "")
                 + (minutes !=0 ? minutes + " " + formatTime((int) minutes, "минута", "минуты", "минут"):
                 seconds + " " + formatTime((int) seconds, "секунда", "секунды", "секунд"));
 
     }
-    private static String formatTime(int num, String single, String lessfive, String others) {
-        if (num % 100 > 10 && num % 100 < 15) return others;
+    private static String formatTime(int num, String nom, String gen, String plu) {
+        if (num % 100 > 10 && num % 100 < 15) return plu;
         switch (num % 10) {
             case 1:
-                return single;
+                return nom;
             case 2:
             case 3:
             case 4:
-                return lessfive;
+                return gen;
             default:
-                return others;
+                return plu;
         }
     }
 
