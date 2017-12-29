@@ -100,13 +100,13 @@ public class Main {
                             }
 
                             case "stop": {
-                                log(CC.RED + "Бот проработал " + CC.RESET + Utils.convert((int) ((System.currentTimeMillis() - start)) / 1000));
+                                log(CC.RED + "Бот проработал " + CC.RESET + Utils.convert((int) (System.currentTimeMillis() - start)));
                                 log(CC.RED + "Выключение..." + CC.RESET);
                                 Runtime.getRuntime().exit(0);
                             }
 
                             case "gc": {
-                                System.out.println(CC.RED + "Время работы: " + CC.RESET + Utils.convert((int) ((System.currentTimeMillis() - start)) / 1000));
+                                System.out.println(CC.RED + "Время работы: " + CC.RESET + Utils.convert((int) (System.currentTimeMillis() - start)));
                                 System.out.println(CC.RED + "Максимум памяти: " + CC.GREEN + Runtime.getRuntime().maxMemory() / 1024L / 1024L + " MB" + CC.RESET);
                                 System.out.println(CC.RED + "Доступно памяти: " + CC.GREEN + Runtime.getRuntime().totalMemory() / 1024L / 1024L + " MB" + CC.RESET);
                                 System.out.println(CC.RED + "Свободно памяти: " + CC.GREEN + Runtime.getRuntime().freeMemory() / 1024L / 1024L + " MB" + CC.RESET);

@@ -43,32 +43,32 @@ public class Utils {
         }
         return last_name;
     }
-
+    
     public static String convert(int time){
 
-        // Мутил дичь, в итоге забил...
-        // TODO: Сделать нормальный форматер времени.... (проблема с тем, что сейчас может быть 1 день 30 часов 61526 минут
-        // TODO: Ну а еще замутить склоненеия
+        long seconds = (time / 1000) % 60;
+        long minutes = (time / (1000 * 60)) % 60;
+        long hours = (time / (1000 * 60 * 60)) % 24;
+        long days = (time / (1000 * 60 * 60 * 24));
 
-        int minutes = 0;
-        int hour = 0;
-        int day = 0;
+        return (days != 0 ? days + " " +formatTime((int) days, "день", "дня", "дней") : "")
+                + (hours != 0 ? hours + " " + formatTime((int) hours, "час", "часа", "часов") : "")
+                + (minutes !=0 ? minutes + " " + formatTime((int) minutes, "минута", "минуты", "минут"):
+                seconds + " " + formatTime((int) seconds, "секунда", "секунды", "секунд"));
 
-        if (time >= 60) {
-            minutes = time / 60;
-
-            if (time >= 3600) {
-                hour = time / 3600;
-
-                if (time >= 86400){
-                    day = time / 86400;
-                }
-            }
+    }
+    private static String formatTime(int num, String single, String lessfive, String others) {
+        if (num % 100 > 10 && num % 100 < 15) return others;
+        switch (num % 10) {
+            case 1:
+                return single;
+            case 2:
+            case 3:
+            case 4:
+                return lessfive;
+            default:
+                return others;
         }
-
-        return (day != 0 ? day + " дней" : "")
-                + (hour != 0 ? hour + " часов" : "")
-                + (minutes !=0 ? minutes + " минут": time + " секнуд");
     }
 
     public static String getGroup(String permission){
